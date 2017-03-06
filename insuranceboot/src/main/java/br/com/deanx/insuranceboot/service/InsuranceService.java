@@ -12,23 +12,28 @@ public abstract class InsuranceService {
 	private Locale locale = Locale.GERMANY;
 	protected Insurance insurance = new Insurance();
 	
-	public abstract Insurance calculateInsurance(ClientScenario clientScenario);
+	public abstract Insurance formulateInsuranceProposal(ClientScenario clientScenario);
+	public abstract boolean isAValidClientScenario(ClientScenario clientScenario);
 	
-	public Insurance calculateInsurance(ClientScenario clientScenario, InsuranceType insuranceType) {
+	public Insurance formulateInsuranceProposal(ClientScenario clientScenario, InsuranceType insuranceType) {
 		BigDecimal insuranceValue = this.calculateInsuranceValue(clientScenario, insuranceType);
 		String formattedValue = this.getFormatedValue(insuranceValue);
 		this.insurance.setValue(formattedValue);
 		return this.insurance;
 	}
 	
-	BigDecimal calculateInsuranceValue(ClientScenario clientScenario, InsuranceType insuranceType) {
+	public boolean isAValidClientScenario(ClientScenario clientScenario, InsuranceType insuranceType) {
+		return (clientScenario.getItemValue().compareTo(insuranceType.getMinValue()) >= 0
+				&& clientScenario.getItemValue().compareTo(insuranceType.getMaxValue()) <= 0);
+	}
+	
+	private BigDecimal calculateInsuranceValue(ClientScenario clientScenario, InsuranceType insuranceType) {
 		BigDecimal insuranceValue = new BigDecimal(insuranceType.getRisk() / 100).multiply(clientScenario.getItemValue());
 		return insuranceValue;
 	}
 	
-	String getFormatedValue(BigDecimal insuranceValue) {
+	private String getFormatedValue(BigDecimal insuranceValue) {
 		String formattedValue = NumberFormat.getCurrencyInstance(locale).format(insuranceValue);
 		return formattedValue;
 	}
-	
 }

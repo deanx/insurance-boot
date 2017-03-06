@@ -1,5 +1,7 @@
 package br.com.deanx.insuranceboot.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +18,16 @@ public class InsuranceController {
 	private InsuranceService insuranceService = null;
 	
 	@RequestMapping(value="/", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
-	public Insurance calculateInsurance(@RequestBody ClientScenario clientScenario) {
-		System.out.println(clientScenario);
+	public Insurance calculateInsurance(@RequestBody ClientScenario clientScenario, HttpServletResponse response) {
+		
 		InsuranceServiceFactory insuranceServiceFactory = new InsuranceServiceFactory();
 		String clientItemType = clientScenario.getItemType().toUpperCase();
 		
 		insuranceService = insuranceServiceFactory.getInsuranceService(clientItemType);
-		return insuranceService.calculateInsurance(clientScenario);
+		
+		if(!(null != insuranceService && insuranceService.isAValidClientScenario(clientScenario))) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		}
+		return insuranceService.formulateInsuranceProposal(clientScenario);
 	}
 }

@@ -8,7 +8,13 @@ public class BikeInsuranceService extends InsuranceService {
 	private final InsuranceType insuranceType = InsuranceType.BICICLE;
 
 	@Override
-	public Insurance calculateInsurance(ClientScenario clientScenario) {
-		return calculateInsurance(clientScenario, this.insuranceType);
+	public Insurance formulateInsuranceProposal(ClientScenario clientScenario) {
+		return formulateInsuranceProposal(clientScenario, this.insuranceType);
 	}
+
+	@Override
+	public boolean isAValidClientScenario(ClientScenario clientScenario) {
+		return isAValidClientScenario(clientScenario, this.insuranceType);
+	}
+	
 }
