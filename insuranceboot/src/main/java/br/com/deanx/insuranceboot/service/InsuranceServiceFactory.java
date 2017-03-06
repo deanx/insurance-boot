@@ -4,6 +4,8 @@ import br.com.deanx.insuranceboot.model.InsuranceType;
 
 public class InsuranceServiceFactory {
 	public InsuranceService getInsuranceService(String productType) {
+		productType = productType.toUpperCase();
+		
 		if (productType.equals(InsuranceType.BICICLE.toString())) {
 			return new BikeInsuranceService();
 		}
@@ -20,6 +22,6 @@ public class InsuranceServiceFactory {
 			return new SportsEquipmentInsuranceService();
 		}
 
-		return null;
+		throw new IllegalArgumentException();
 	}
 }

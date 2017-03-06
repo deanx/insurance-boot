@@ -15,14 +15,14 @@ public abstract class InsuranceService {
 	public abstract Insurance formulateInsuranceProposal(ClientScenario clientScenario);
 	public abstract boolean isAValidClientScenario(ClientScenario clientScenario);
 	
-	public Insurance formulateInsuranceProposal(ClientScenario clientScenario, InsuranceType insuranceType) {
+	Insurance formulateInsuranceProposal(ClientScenario clientScenario, InsuranceType insuranceType) {
 		BigDecimal insuranceValue = this.calculateInsuranceValue(clientScenario, insuranceType);
 		String formattedValue = this.getFormatedValue(insuranceValue);
 		this.insurance.setValue(formattedValue);
 		return this.insurance;
 	}
 	
-	public boolean isAValidClientScenario(ClientScenario clientScenario, InsuranceType insuranceType) {
+	boolean isAValidClientScenario(ClientScenario clientScenario, InsuranceType insuranceType) {
 		return (clientScenario.getItemValue().compareTo(insuranceType.getMinValue()) >= 0
 				&& clientScenario.getItemValue().compareTo(insuranceType.getMaxValue()) <= 0);
 	}
