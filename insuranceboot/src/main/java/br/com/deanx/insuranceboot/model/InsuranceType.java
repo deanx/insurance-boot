@@ -2,7 +2,7 @@ package br.com.deanx.insuranceboot.model;
 
 import java.math.BigDecimal;
 
-public enum EnsuranceType {
+public enum InsuranceType {
 	BICICLE {
 		public Double getRisk() {
 			return 30.0;

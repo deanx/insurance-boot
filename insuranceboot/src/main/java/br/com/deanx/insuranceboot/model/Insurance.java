@@ -2,7 +2,7 @@ package br.com.deanx.insuranceboot.model;
 
 import java.math.BigDecimal;
 
-public class Ensurance {
+public class Insurance {
 	private BigDecimal value;
 
 	public BigDecimal getValue() {
