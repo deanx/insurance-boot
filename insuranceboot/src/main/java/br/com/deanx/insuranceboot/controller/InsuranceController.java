@@ -12,23 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.deanx.insuranceboot.model.ClientScenario;
 import br.com.deanx.insuranceboot.model.Insurance;
 import br.com.deanx.insuranceboot.service.InsuranceService;
-import br.com.deanx.insuranceboot.service.InsuranceServiceFactory;
-import br.com.deanx.insuranceboot.service.InsuranceServiceGeneral;
 
 @RestController
 public class InsuranceController {
-	private final InsuranceServiceGeneral insuranceServiceGeneral = new InsuranceServiceGeneral();
-	private final InsuranceServiceFactory insuranceServiceFactory = new InsuranceServiceFactory();
-	private InsuranceService insuranceService;
+	private InsuranceService insuranceService = new InsuranceService();
 
 	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Insurance calculateInsurance(@RequestBody ClientScenario clientScenario, HttpServletResponse response) {
 		try {
-			insuranceServiceGeneral.validateClientScenario(clientScenario);
-
-			insuranceService = insuranceServiceFactory.getInsuranceService(clientScenario);
-
+			clientScenario.validate();
 			return insuranceService.formulateInsuranceProposal(clientScenario);
 
 		} catch (IllegalArgumentException e) {

@@ -10,64 +10,61 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import br.com.deanx.insuranceboot.model.ClientScenario;
+import br.com.deanx.insuranceboot.model.InsuranceType;
 
 public class InsuranceServiceTest {
 
-	private static InsuranceServiceFactory insuranceServiceFactory;
+	private static InsuranceService insuranceService;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		insuranceServiceFactory = new InsuranceServiceFactory();
+		insuranceService = new InsuranceService();
 	}
 
 	@Test
 	public void formulateInsuranceForBicicle() {
 		ClientScenario clientScenario = new ClientScenario();
-		clientScenario.setItemType("BICICLE");
+		clientScenario.setItemType(InsuranceType.BICICLE);
 		clientScenario.setItemValue(new BigDecimal(30));
 
-		InsuranceService insuranceService = insuranceServiceFactory.getInsuranceService(clientScenario);
 		assertEquals("0,90 €", insuranceService.formulateInsuranceProposal(clientScenario).getValue());
 	}
 
 	@Test
 	public void formulateInsuranceForJewelry() {
 		ClientScenario clientScenario = new ClientScenario();
-		clientScenario.setItemType("JEWELRY");
+		clientScenario.setItemType(InsuranceType.JEWELRY);
 		clientScenario.setItemValue(new BigDecimal(1_000));
 
-		InsuranceService insuranceService = insuranceServiceFactory.getInsuranceService(clientScenario);
 		assertEquals("5,00 €", insuranceService.formulateInsuranceProposal(clientScenario).getValue());
 	}
 
 	@Test
 	public void formulateInsuranceForElectronics() {
 		ClientScenario clientScenario = new ClientScenario();
-		clientScenario.setItemType("ELECTRONICS");
+		clientScenario.setItemType(InsuranceType.ELECTRONICS);
 		clientScenario.setItemValue(new BigDecimal(1200));
 
-		InsuranceService insuranceService = insuranceServiceFactory.getInsuranceService(clientScenario);
 		assertEquals("42,00 €", insuranceService.formulateInsuranceProposal(clientScenario).getValue());
 	}
 
 	@Test
 	public void formulateInsuranceForSportsEquipment() {
 		ClientScenario clientScenario = new ClientScenario();
-		clientScenario.setItemType("SPORTS_EQUIPMENT");
+		clientScenario.setItemType(InsuranceType.SPORTS_EQUIPMENT);
 		clientScenario.setItemValue(new BigDecimal(10000));
 
-		InsuranceService insuranceService = insuranceServiceFactory.getInsuranceService(clientScenario);
 		assertEquals("300,00 €", insuranceService.formulateInsuranceProposal(clientScenario).getValue());
 	}
 
 	@Test
 	public void validateScenarioForCorrectClientScenario() {
 		ClientScenario clientScenario = new ClientScenario();
-		clientScenario.setItemType("BICICLE");
+		clientScenario.setItemType(InsuranceType.BICICLE);
 		clientScenario.setItemValue(new BigDecimal(30));
 
 		try {
-			new InsuranceServiceGeneral().validateClientScenario(clientScenario);
+			clientScenario.validate();
 		} catch (IllegalArgumentException e) {
 			assertNull(e);
 		}
@@ -76,11 +73,11 @@ public class InsuranceServiceTest {
 	@Test
 	public void validateScenarioForLowValue() {
 		ClientScenario clientScenario = new ClientScenario();
-		clientScenario.setItemType("JEWELRY");
+		clientScenario.setItemType(InsuranceType.JEWELRY);
 		clientScenario.setItemValue(new BigDecimal(30));
 
 		try {
-			new InsuranceServiceGeneral().validateClientScenario(clientScenario);
+			clientScenario.validate();
 		} catch (IllegalArgumentException e) {
 			assertNotNull(e);
 		}
@@ -89,11 +86,11 @@ public class InsuranceServiceTest {
 	@Test
 	public void validateScenarioForHighValue() {
 		ClientScenario clientScenario = new ClientScenario();
-		clientScenario.setItemType("BICICLE");
+		clientScenario.setItemType(InsuranceType.ELECTRONICS);
 		clientScenario.setItemValue(new BigDecimal(300000));
 
 		try {
-			new InsuranceServiceGeneral().validateClientScenario(clientScenario);
+			clientScenario.validate();
 		} catch (IllegalArgumentException e) {
 			assertNotNull(e);
 		}
