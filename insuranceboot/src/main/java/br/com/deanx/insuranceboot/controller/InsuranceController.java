@@ -27,6 +27,7 @@ public class InsuranceController {
 		
 		if(!(null != insuranceService && insuranceService.isAValidClientScenario(clientScenario))) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return new Insurance();
 		}
 		return insuranceService.formulateInsuranceProposal(clientScenario);
 	}
