@@ -1,15 +1,13 @@
 package br.com.deanx.insuranceboot.model;
 
-import java.math.BigDecimal;
-
 public class Insurance {
-	private BigDecimal value;
+	private String value;
 
-	public BigDecimal getValue() {
+	public String getValue() {
 		return value;
 	}
 
-	public void setValue(BigDecimal value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 	

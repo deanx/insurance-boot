@@ -9,7 +9,7 @@ public class ElectronicsInsuranceService extends InsuranceService {
 	
 	@Override
 	public Insurance calculateInsurance(ClientScenario clientScenario) {
-		return this.calculateInsuranceValue(clientScenario, insuranceType);
+		return calculateInsurance(clientScenario, this.insuranceType);
 	}
 
 }
