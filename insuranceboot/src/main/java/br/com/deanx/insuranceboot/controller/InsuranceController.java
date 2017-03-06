@@ -13,28 +13,29 @@ import br.com.deanx.insuranceboot.model.ClientScenario;
 import br.com.deanx.insuranceboot.model.Insurance;
 import br.com.deanx.insuranceboot.service.InsuranceService;
 import br.com.deanx.insuranceboot.service.InsuranceServiceFactory;
+import br.com.deanx.insuranceboot.service.InsuranceServiceGeneral;
 
 @RestController
 public class InsuranceController {
-	private InsuranceService insuranceService = null;
+	private final InsuranceServiceGeneral insuranceServiceGeneral = new InsuranceServiceGeneral();
+	private final InsuranceServiceFactory insuranceServiceFactory = new InsuranceServiceFactory();
+	private InsuranceService insuranceService;
 
 	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Insurance calculateInsurance(@RequestBody ClientScenario clientScenario, HttpServletResponse response) {
 		try {
-			InsuranceServiceFactory insuranceServiceFactory = new InsuranceServiceFactory();
-			String clientItemType = clientScenario.getItemType();
+			insuranceServiceGeneral.validateClientScenario(clientScenario);
 
-			insuranceService = insuranceServiceFactory.getInsuranceService(clientItemType);
-
-			if (!insuranceService.isAValidClientScenario(clientScenario)) {
-				throw new IllegalArgumentException();
-			}
+			insuranceService = insuranceServiceFactory.getInsuranceService(clientScenario);
 
 			return insuranceService.formulateInsuranceProposal(clientScenario);
 
-		} catch (Exception e) {
+		} catch (IllegalArgumentException e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return null;
+		} catch (Exception e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return null;
 		}
 	}
