@@ -17,7 +17,7 @@ import br.com.deanx.insuranceboot.service.InsuranceService;
 public class InsuranceController {
 	private InsuranceService insuranceService = new InsuranceService();
 
-	@CrossOrigin(origins = "*")
+	@CrossOrigin(origins="http://localhost:3000",methods=RequestMethod.POST)
 	@RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Insurance calculateInsurance(@RequestBody ClientScenario clientScenario, HttpServletResponse response) {
 		try {
